@@ -22,7 +22,7 @@ class View(ft.UserControl):
         self._page.controls.append(self._title)
 
         #ROW with controls
-        self._txtAnno = ft.TextField(label="Anno")
+        self._txtAnno = ft.TextField(label="Anno", hint_text="Inserisci un anno tra 1816-2016")
         self._btnCalcola = ft.ElevatedButton(text="Calcola Confini", on_click=self._controller.handleCalcola)
         row1 = ft.Row([self._txtAnno, self._btnCalcola], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row1)
