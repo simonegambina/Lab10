@@ -49,3 +49,15 @@ class Model:
             dettagli.append((stato, n_vicini))
 
         return dettagli
+
+    def getNodiGrafo(self):
+        return sorted(list(self._grafo.nodes))
+
+    def getStatiRaggiungibili(self, stato):
+        if stato not in self._grafo.nodes:
+            return []
+
+        componente = nx.node_connected_component(self._grafo, stato)
+
+        return sorted(list(componente))
+

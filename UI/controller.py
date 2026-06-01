@@ -7,6 +7,8 @@ class Controller:
         self._view = view
         # the model, which implements the logic of the program and holds the data
         self._model = model
+        self._year = None
+        self._statoScelto = None
 
     def handleCalcola(self, e):
         self._view._txt_result.controls.clear()
@@ -38,6 +40,15 @@ class Controller:
 
         self._model.creaGrafo(year)
 
+        self._view._ddStato.options.clear()
+
+        for stato in self._model.getNodiGrafo():
+            self._view._ddStato.options.append(
+                ft.dropdown.Option(stato))
+
+        self._view._ddStato.value = None
+        self._statoScelto = None
+
         n_componenti = self._model.getNCompConn()
         dettagli_nodi = self._model.getDettagliNodi()
 
@@ -52,5 +63,32 @@ class Controller:
         for stato, n_vicini in dettagli_nodi:
             self._view._txt_result.controls.append(
                 ft.Text(f"{stato} - {n_vicini} vicini."))
+
+        self._view.update_page()
+
+
+    def _choiceStato(self, e):
+        self._statoScelto = e.control.value
+
+    def handleRaggiungibili(self, e):
+        self._view._txt_result.controls.clear()
+
+        if self._statoScelto is None:
+            self._view._txt_result.controls.append(
+                ft.Text("Attenzione, selezionare uno stato.",
+                                color="red"))
+            self._view.update_page()
+            return
+
+        raggiungibili = self._model.getStatiRaggiungibili(self._statoScelto)
+
+        self._view._txt_result.controls.append(
+            ft.Text(f"Stati raggiungibili da {self._statoScelto}:"))
+
+        self._view._txt_result.controls.append(
+            ft.Text(f"Numero stati raggiungibili: {len(raggiungibili)}"))
+
+        for stato in raggiungibili:
+            self._view._txt_result.controls.append(ft.Text(stato))
 
         self._view.update_page()
